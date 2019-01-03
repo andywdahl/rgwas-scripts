@@ -1,4 +1,5 @@
 # rgwas-scripts
+.
 
 Code to reproduce the analyses in ``Reverse GWAS: Using Genetics to Identify and Model Phenotypic Subtypes''.
 
