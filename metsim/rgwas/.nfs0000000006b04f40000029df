@@ -1,0 +1,94 @@
+rm( list=ls() )
+load( '../Rdata/setup.Rdata' )
+source( '../qqplot_fxns.R' )
+
+type	<- 'pc6'
+types	<- 'pc6'
+load( paste0( '../parse_data/parsed_data/', type, '.Rdata' )  )
+for( type in types )
+	for( pp in 1:(ncol(Yb)+min(10,ncol(Y))) )
+try({
+
+	#load( paste0( '../parse_data/parsed_data/', type, '.Rdata' )  )
+	if( pp <= ncol(Yb) ){
+		phen	<- colnames(Yb)[pp]
+	} else {
+		phen	<- colnames(Y)[pp - ncol(Yb)]
+	}
+
+	jpeg( paste0( '../figs/qqplots/', type, '_', phen, '.jpeg' ), width=25*70, height=6.05*70 )
+	par( layout( matrix(c(6,1:5),1,6), widths=c(1.0,rep(6,4),5.7) ) )
+
+	par( mar=c(7,2,7,2) )
+	for( K in 1:4 )
+try({
+
+	allout	<- rep( NA, 666 * 1e3 )
+	for( batch in 1:666 ){
+	#for( batch in sample( 666, 50 ) ){
+		savefile	<-	paste0( 'Rdata/', type,'_', K, '_', batch, '.Rdata' )
+		if( !file.exists( savefile ) ){
+			#print( savefile )
+			next
+		}
+tryCatch({
+		load( savefile )
+}, error=function(e){ print( savefile ); file.remove( savefile ) })
+
+		if( K > 1 ){
+			#print( out[[pp]] )
+			ps	<- -log10( out[[pp]]['Het',] )
+		} else {
+			ps	<- unlist( out[[pp]] )
+		}
+		allout[ (batch-1)*1e3+1:1e3 ]	<- ps
+		rm( out, ps )
+	}
+	#print( which( is.na( allout[1:501078] ) ) )
+	#print( which( !is.na( allout[-(1:501078)] ) ) )
+	
+	if( all( is.na( allout ) ) ){ plot.new(); next }
+	print( sum( !is.na( allout ) ))
+
+	y		<- sort(allout)
+	main	<- ifelse( K == 1, 'Hom. test (K=1)', paste( 'K =', K ) )
+
+	qqplot_fxn( y, lims=c(0,8), main=main )
+	mtext( side=1, line=4.1, cex=1.3, expression( -log[10](p[null]) ) )
+	if( K == 1 )
+	mtext( side=2, line=4.1, cex=1.3, expression( -log[10](p[obs]) ) )
+
+	ylam		<- qchisq(1-10^-y,1)
+	lam_gc	<- median(ylam)/qchisq(0.5,1)
+	#lambda1000 <- 1 + (lam_gc - 1) * (1 / sum(cc==1) + 1 / sum(cc==0)) * 500
+	#lam_gc	<- lambda1000
+
+	text( 2, 7, lab=substitute( lambda[gc] == x, list( x = sprintf( '%3.2f', lam_gc ) ) ), cex=2 )
+	text( 7, 2, lab=round( range( y, na.rm=T ), 2 )[1]  )
+	text( 7, 1.5, lab=round( range( y, na.rm=T ), 2 )[2]  )
+
+	qqline_fxn( lam_gc_correct( y, lam_gc ), col=1, pts=F )
+
+	if( K > 1 ){
+		#load(	paste0( '../mfmrx_10/Rdata/', type,'_', K, '_snp.Rdata' ) )
+		load(	paste0( '../mfmrx_10/Rdata/', type,'_', K, '_simple.Rdata' ) )
+
+		psx	<- sapply( out[[pp]], function(x) x$pvals['Het'] )
+		psx	<- -log10( psx )
+		qqline_fxn( sort( psx ), col='tan', pts=T )
+		lps1	<- lam_gc_correct( psx, lam_gc )
+		#print( cbind( 10^-lps1, sort( psx ) ) )
+		qqline_fxn( sort( lps1 ), col='tan4', pts=T )
+
+		rm( out, psx )
+	}
+
+})
+par(mar=c(10,0,10,0))
+plot.new()
+legend( 'top', leg=phen, cex=3, bty='n' )
+legend( 'center', fill=c('grey',1,'tan','tan4'), expression( paste( 'Genotyped SNPs (no ', lambda[GC], ')' ), 'Genotyped SNPs', paste( 'Known SNPs (no ', lambda[GC], ')' ), 'Known SNPs' ), cex=3, bty='n' )
+plot.new()
+
+dev.off()
+})
