@@ -1,4 +1,4 @@
-# rgwas-scripts
+# R scripts for RGWAS paper
 
 Code to reproduce the analyses in Dahl et al 2019 Plos Genetics:
 
