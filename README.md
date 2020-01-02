@@ -1,7 +1,9 @@
 # rgwas-scripts
 
-Code to reproduce the analyses in "Reverse GWAS: Using Genetics to Identify and Model Phenotypic Subtypes''.
+Code to reproduce the analyses in Dahl et al 2019 Plos Genetics:
 
-See my the "rgwas" github page the R package and a vignette. This github page, "rgwas-scripts", is not expected to be particularly useful.
+Andy Dahl, Na Cai, Arthur Ko, Markku Laakso, Päivi Pajukanta, Jonathan Flint, Noah Zaitlen. 2019. PLoS Genetics. Reverse GWAS: Using genetics to identify and model phenotypic subtypes. https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1008009
 
-No individual level data is included, so full reproduction of results from raw data is impossible. However, many intermediate .Rdata files have been included, which allow reproduction of the figures and tables.
+See the "rgwas" repository for the R package and vignette: https://github.com/andywdahl/rgwas.
+
+This repository is not expected to be particularly useful--no individual level data is included, so full reproduction of results from raw data is impossible. However, many intermediate .Rdata files have been included, for transparency and to enable reproduction of the figures and tables.
