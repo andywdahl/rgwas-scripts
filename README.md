@@ -6,4 +6,4 @@ Andy Dahl, Na Cai, Arthur Ko, Markku Laakso, Päivi Pajukanta, Jonathan Flint, N
 
 See the "rgwas" repository for the R package and vignette: https://github.com/andywdahl/rgwas.
 
-This repository is not expected to be particularly useful--no individual level data is included, so full reproduction of results from raw data is impossible. Nonetheless, many intermediate .Rdata files are included, to increase transparency and enable reproduction of the figures and tables.
+This repository is not expected to be particularly useful--no individual level data is included, so full reproduction of results from raw data is impossible. But many intermediate .Rdata files are included to enable reproduction of the figures and tables.
